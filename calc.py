@@ -157,6 +157,15 @@ def median(data):
     raise ValueError('numpy needed to run \'median\'')
   yield n.median(list(data))
 
+def summary(data):
+  try:
+    import numpy as np
+  except ImportError:
+    raise ValueError('numpy needed to run \'summary\'')
+  data2 = list(data)  #store all data
+  print("size\tmin\tmean\tmedian\tmax\tvar\tstd_dev")
+  return ["\t".join([str(len(data2)),str(round(min(data2),2)),str(round(np.mean(data2),2)), str(round(np.median(data2),2)), str(round(max(data2),2)), str(round(np.var(data2),2)), str(round(np.std(data2),2))])]
+
 class Command(object):
   '''An individual command, deals with execution & formatting'''
 
@@ -223,6 +232,7 @@ c.register_command('print', function=None,
 c.register_command('help', function=None, help="Print this message")
 c.register_command('mean_var', function=s_mean_var,
                    help='Computes mean & variance with one pass')
+c.register_command('summary', function=summary, help='Summary statistics (not streaming mode)')
 
 
 if __name__ == "__main__":
