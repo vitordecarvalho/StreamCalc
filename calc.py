@@ -74,6 +74,11 @@ $ jot -r 100 | calc.py log | calc.py hist
 [3.68,4.14): #############################
 [4.14,4.60]: ################################
 
+$ jot -r 100 | calc.py summary
+size	min	  mean	  median	max	    var	    std_dev
+100	    1.0	  53.21	  56.0	    99.0	809.17	28.45
+
+
 '''
 from __future__ import division
 import math as m
