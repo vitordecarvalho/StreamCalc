@@ -38,7 +38,9 @@ $ jot -r 100 | calc.py hist
 [68.10,77.40): #######
 [77.40,86.70): ###############
 [86.70,96.00]: #########
-# print a histogram of random data with T number of bins
+
+
+# print a histogram of random data with 21 bins
 $ jot -r 100 | calc.py hist 21
 [    1,  5.7): #######
 [  5.7,   10): ##
@@ -76,7 +78,7 @@ $ jot -r 100 | calc.py log | calc.py hist
 [3.68,4.14): #############################
 [4.14,4.60]: ################################
 
-
+# calculate summary statistics (not in streaming mode)
 $ jot -r 100 | calc.py summary
 size	min	  mean	  median	max	    var	    std_dev
 100	    1.0	  53.21	  56.0	    99.0	809.17	28.45
