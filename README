@@ -1,2 +1,82 @@
-StreamCalc is a simple python command-line stream calculator. See the comments at
-the top of calc.py for a few examples.
+StreamCalc is a simple python command-line stream calculator. 
+
+
+A command-line calculator over streams of numbers.
+Requires numpy for 'hist' and 'median'.
+
+
+Examples:
+# create a file with 100 random numbers, 1 per line
+$ jot -r 100 > /tmp/random
+# the max, min, mean of that random data
+$ calc.py max /tmp/random
+100.0
+
+$ calc.py min /tmp/random
+1.0
+
+$ calc.py mean /tmp/random
+48.86
+
+# the median, using pipes instead of the file name
+$ cat /tmp/random | calc.py median
+51.0
+
+# chaining commands -- exponentiating, then adding the numbers
+$ cat /tmp/random | calc.py exp | calc.py sum
+8.22200074586e+43
+
+# print a histogram of random data (10 bins by default)
+$ jot -r 100 | calc.py hist
+[ 3.00,12.30): ############
+[12.30,21.60): ########
+[21.60,30.90): #######
+[30.90,40.20): #########
+[40.20,49.50): ###############
+[49.50,58.80): #########
+[58.80,68.10): #########
+[68.10,77.40): #######
+[77.40,86.70): ###############
+[86.70,96.00]: #########
+# print a histogram of random data with T number of bins
+$ jot -r 100 | calc.py hist 21
+[    1,  5.7): #######
+[  5.7,   10): ##
+[   10,   15): ##
+[   15,   20): ######
+[   20,   25): ######
+[   25,   29): ##########
+[   29,   34): ####
+[   34,   39): #####
+[   39,   43): ###
+[   43,   48): #####
+[   48,   53): ####
+[   53,   58): #
+[   58,   62): #####
+[   62,   67): ####
+[   67,   72): #######
+[   72,   76): ##
+[   76,   81): #####
+[   81,   86): ####
+[   86,   91): ######
+[   91,   95): #####
+[   95,1e+02]: #######
+
+
+# same thing, but logarithmic histogram bins
+$ jot -r 100 | calc.py log | calc.py hist
+[0.00,0.46): ###
+[0.46,0.92): ##
+[0.92,1.38):
+[1.38,1.84): ###
+[1.84,2.30): ###
+[2.30,2.76): #####
+[2.76,3.22): ############
+[3.22,3.68): ###########
+[3.68,4.14): #############################
+[4.14,4.60]: ################################
+
+
+$ jot -r 100 | calc.py summary
+size	min	  mean	  median	max	    var	    std_dev
+100	    1.0	  53.21	  56.0	    99.0	809.17	28.45
