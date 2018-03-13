@@ -24,7 +24,7 @@ $ cat /tmp/random | calc.py median
 $ cat /tmp/random | calc.py exp | calc.py sum
 8.22200074586e+43
 
-# print a histogram of random data
+# print a histogram of random data (10 bins by default)
 $ jot -r 100 | calc.py hist
 [ 3.00,12.30): ############
 [12.30,21.60): ########
@@ -36,6 +36,30 @@ $ jot -r 100 | calc.py hist
 [68.10,77.40): #######
 [77.40,86.70): ###############
 [86.70,96.00]: #########
+
+# print a histogram of random data with T number of bins
+$ jot -r 100 | calc.py hist 21
+[    1,  5.7): #######
+[  5.7,   10): ##
+[   10,   15): ##
+[   15,   20): ######
+[   20,   25): ######
+[   25,   29): ##########
+[   29,   34): ####
+[   34,   39): #####
+[   39,   43): ###
+[   43,   48): #####
+[   48,   53): ####
+[   53,   58): #
+[   58,   62): #####
+[   62,   67): ####
+[   67,   72): #######
+[   72,   76): ##
+[   76,   81): #####
+[   81,   86): ####
+[   86,   91): ######
+[   91,   95): #####
+[   95,1e+02]: #######
 
 # same thing, but logarithmic histogram bins
 $ jot -r 100 | calc.py log | calc.py hist
@@ -118,12 +142,13 @@ def s_sum(data): yield sum(data)
 def s_max(data): yield max(data)
 def s_min(data): yield min(data)
 
+num_hist_bins = 10
 def hist(data):
   try:
     import numpy as n
   except ImportError:
     raise ValueError('numpy needed to run \'hist\'')
-  yield n.histogram(list(data), new=True)
+  yield n.histogram(list(data),bins=num_hist_bins)
 
 def median(data):
   try:
@@ -241,11 +266,15 @@ Available Commands:
 
   if command == 'help': help_quit(0)
 
-  l = (float(x.strip()) for x in read(*sys.argv[2:]) \
+  start_idx = 2
+  if command == 'hist' and len(sys.argv)>2 and all([i.isdigit() for i in sys.argv[2]]) :
+    num_hist_bins = float(sys.argv[2])
+    start_idx = 3
+
+  l = (float(x.strip()) for x in read(*sys.argv[start_idx:]) \
           if len(x.strip()) > 0 and x[0] != '#')
+
   try:
     for x in c.process(command, l): print x
   except ValueError, e:
     help_quit(1, e)
-
-
